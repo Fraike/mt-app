@@ -3,7 +3,7 @@
         <i class="el-icon-location"/>北京市
         <nuxt-link 
         class="changeCity" 
-       
+        to="/changeCity"
         >切换城市</nuxt-link>
         [深圳 田径 上海]
     </div>
