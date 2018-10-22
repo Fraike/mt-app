@@ -1,13 +1,15 @@
 import Router from 'koa-router';
 import Redis from 'koa-redis';
 import nodeMailer from 'nodemailer';
-import User from '../dbs/models/users'
-import Passport from './utils/passport'
-import Email from '../dbs/config'
-import axios from './utils/axios'
+//导入用户模型
+import User from '../dbs/models/users';
+import Passport from './utils/passport';
+import Email from '../dbs/config';
+import axios from './utils/axios';
 
+//接口的统一前缀
 let router = new Router({
-    prefix: '/user'
+    prefix: '/users'
 })
 
 let Store = new Redis().client
@@ -32,7 +34,7 @@ router.post('/signup',async (ctx)=>{
             }else{
                 ctx.body={
                     code: -1,
-                    msg: '验证码错误'
+                    msg: '请填写正确验证码'
                 }
             }
         }
@@ -42,6 +44,7 @@ router.post('/signup',async (ctx)=>{
             msg: '请填写验证码'
         }
     }
+    //检测是否被注册
     let user = await User.find({
         username
     })
@@ -52,11 +55,13 @@ router.post('/signup',async (ctx)=>{
         }
         return
     }
+    //写入
     let nuser = await User.create({
         username,
         password,
         email
     })
+    //如果注册成功，跳转至登录界面
     if(nuser){
         let res = await axios.post('/users/signin',{
             username,password
@@ -107,14 +112,15 @@ router.post('/signin',async (ctx,next)=>{
 
 router.post('/verify',async (ctx,next)=>{
     let username = ctx.request.body.username
-    const saveExpire = await Store.hget(`nodemail:${usermail}`,'expire')
+    const saveExpire = await Store.hget(`nodemail:${username}`,'expire')
     if(saveExpire&& new Date().getTime()-saveExpire<0){
         ctx.body = {
             code: -1,
-            msg: '频繁请求'
+            msg: '验证请求过于频繁，一分钟一次'
         }
         return false
     }
+    //发送邮件
     let transporter = nodeMailer.createTransport({
         host: Email.smtp.host,
         port: 587,
@@ -133,8 +139,8 @@ router.post('/verify',async (ctx,next)=>{
     let mailOptions = {
         from: `"认证邮件"<${Email.smtp.user}>`,
         to: ko.email,
-        subject: 'wwt',
-        html: `邀请码${ko.code}`
+        subject: '注册码',
+        html: `邀请码是${ko.code}`
     }
     await transporter.sendMail(mailOptions,(error,info)=>{
         if(error){
@@ -163,7 +169,7 @@ router.get('/exit',async (ctx,next)=>{
     }
 })
 
-router.get('/getUsre',async (ctx)=>{
+router.get('/getUser',async (ctx)=>{
     if(ctx.isAuthenticated()){
         const {username, email} = ctx.session.passport.user
         ctx.body={

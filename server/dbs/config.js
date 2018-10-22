@@ -15,14 +15,17 @@ export default {
         get user(){
             return '648128145@qq.com'
         },
+        //腾讯邮箱申请码
         get pass(){
             return 'krsdhrlnuahsbgah'
         },
+        //生成随机验证码
         get code(){
             return ()=>{
                 return Math.random().toString(16).slice(2,6).toUpperCase()
             }
         },
+        //过期时间
         get expire(){
             return ()=>{
                 return new Date().getTime()+60*60*1000

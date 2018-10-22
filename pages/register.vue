@@ -117,7 +117,7 @@ export default {
             this.$refs['ruleForm'].validateField('name',(valid) => {
                 namePass = valid
             })
-            slef.statusMsg = '';
+            self.statusMsg = '';
             if(namePass) {
                 return false
             }
