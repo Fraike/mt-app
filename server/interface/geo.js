@@ -10,7 +10,7 @@ const sign = 'e7a80781c5db67b4ac94feec1a06037e'
 
 router.get('/getPosition',async (ctx)=>{
     let {status,data:{province,city}} = await axios.get(`http://cp-tools.cn/geo/getPosition?sign=${sign}`)
-    
+    console.log(province)
     if(status===200){
         ctx.body = {
             province,

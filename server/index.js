@@ -21,7 +21,7 @@ import categroy from './interface/categroy'
 
 
 const app = new Koa()
-const host = process.env.HOST || '127.0.0.1'
+const host = process.env.HOST || 'localhost'
 const port = process.env.PORT || 3000
 //跟cookie有关
 app.keys = ['mt','keyskeys']
