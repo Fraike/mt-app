@@ -7,7 +7,7 @@ import mongoose from 'mongoose'
 //处理post请求
 import bodyParser from 'koa-bodyparser'
 //操作session cookie
-import session from 'koa-generic-session'
+import session from 'koa-generic-session' //处理koa和session
 import Redis from 'koa-redis'
 //json格式美化
 import json from 'koa-json'

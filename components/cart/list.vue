@@ -1,9 +1,10 @@
 <template>
  <el-table
     :data="tableData"
-    style="width: 100%">
+    style="width: 980px">
     <el-table-column
-      label="日期"
+      label="项目"
+      prop="name"
       width="180">
       <template slot-scope="scope">
         <i class="el-icon-time"></i>
